@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>   
+    <h1>Jogo da Forca</h1>
+    <p id="wordDisplay"></p>
+    <input type="text" id="guess" maxlength="1">
+    <button onclick="makeGuess()">Adivinhar</button>
+    <p id="message"></p>
+    
+    <script>
+        const words = ["javascript", "programacao", "computador", "desenvolvimento", "Jogos", "Casa", "cidade", "camelo", "Guns and Roses"];
+        let chosenWord = words[Math.floor(Math.random() * words.length)];
+        let displayWord = Array(chosenWord.length).fill("_");
+        let remainingGuesses = 6;
+
+        function updateDisplay() {
+            document.getElementById("wordDisplay").innerText = displayWord.join(" ");
+            document.getElementById("message").innerText = `Tentativas restantes: ${remainingGuesses}`;
+        }
+
+        function makeGuess() {
+            const guess = document.getElementById("guess").value.toLowerCase();
+            if (guess.length !== 1) {
+                alert("Por favor, insira apenas uma letra.");
+                return;
+            }
+            let correctGuess = false;
+            for (let i = 0; i < chosenWord.length; i++) {
+                if (chosenWord[i] === guess) {
+                    displayWord[i] = guess;
+                    correctGuess = true;
+                }
+            }
+            if (!correctGuess) {
+                remainingGuesses--;
+            }
+            updateDisplay();
+            checkGameStatus();
+        }
+
+        function checkGameStatus() {
+            if (displayWord.join("") === chosenWord) {
+                document.getElementById("message").innerText = "Você ganhou!";
+            } else if (remainingGuesses <= 0) {
+                document.getElementById("message").innerText = `Você perdeu! A palavra era "${chosenWord}".`;
+            }
+        }
+
+        updateDisplay();
+    </script>
+</body>
+</html>
